@@ -3,7 +3,7 @@
  *
  *          Project:  UART for ATmega4808
  *          Author:   Hans-Henrik Fuxelius   
- *          Date:     2023-05-02           
+ *          Date:     2023-05-08           
  */
 
 #include <util/atomic.h>
@@ -63,45 +63,46 @@ char rbuffer_remove(volatile ringbuffer* rb) {
 #ifdef USART0_ENABLE
 volatile ringbuffer rb_rx0;		// Receive 
 volatile ringbuffer rb_tx0;		// Transmit
-volatile uint8_t usart0_error;	// Keeps error from RXDATAH
+volatile uint8_t usart0_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART1_ENABLE
 volatile ringbuffer rb_rx1;		// Receive 
 volatile ringbuffer rb_tx1;		// Transmit
-volatile uint8_t usart1_error;	// Keeps error from RXDATAH
+volatile uint8_t usart1_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART2_ENABLE
 volatile ringbuffer rb_rx2;		// Receive 
 volatile ringbuffer rb_tx2;		// Transmit
-volatile uint8_t usart2_error;	// Keeps error from RXDATAH
+volatile uint8_t usart2_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART3_ENABLE
 volatile ringbuffer rb_rx3;		// Receive 
 volatile ringbuffer rb_tx3;		// Transmit
-volatile uint8_t usart3_error;	// Keeps error from RXDATAH
+volatile uint8_t usart3_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART4_ENABLE
 volatile ringbuffer rb_rx4;		// Receive 
 volatile ringbuffer rb_tx4;		// Transmit
-volatile uint8_t usart4_error;	// Keeps error from RXDATAH
+volatile uint8_t usart4_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART5_ENABLE
 volatile ringbuffer rb_rx5;		// Receive 
 volatile ringbuffer rb_tx5;		// Transmit
-volatile uint8_t usart5_error;	// Keeps error from RXDATAH
+volatile uint8_t usart5_error;	// Holds error from RXDATAH
 #endif
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART0 FUNCTIONS
 #ifdef USART0_ENABLE
 void usart0_send_char(char c) {
+	while(rbuffer_full(&rb_tx0));
 	rbuffer_insert(c, &rb_tx0);
-	USART0.CTRLA |= USART_DREIE_bm;
+	USART0.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt 
 }
 
 int usart0_print_char(char c, FILE *stream) { 
@@ -156,8 +157,9 @@ void usart0_close(void) {
 // USART1 FUNCTIONS
 #ifdef USART1_ENABLE
 void usart1_send_char(char c) {
+	while(rbuffer_full(&rb_tx1));
 	rbuffer_insert(c, &rb_tx1);
-	USART1.CTRLA |= USART_DREIE_bm;
+	USART1.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart1_print_char(char c, FILE *stream) { 
@@ -212,8 +214,9 @@ void usart1_close(void) {
 // USART2 FUNCTIONS
 #ifdef USART2_ENABLE
 void usart2_send_char(char c) {
+	while(rbuffer_full(&rb_tx2));
 	rbuffer_insert(c, &rb_tx2);
-	USART2.CTRLA |= USART_DREIE_bm;
+	USART2.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart2_print_char(char c, FILE *stream) { 
@@ -268,8 +271,9 @@ void usart2_close(void) {
 // USART3 FUNCTIONS
 #ifdef USART3_ENABLE
 void usart3_send_char(char c) {
+	while(rbuffer_full(&rb_tx3));
 	rbuffer_insert(c, &rb_tx3);
-	USART3.CTRLA |= USART_DREIE_bm;
+	USART3.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart3_print_char(char c, FILE *stream) { 
@@ -324,8 +328,9 @@ void usart3_close(void) {
 // USART4 FUNCTIONS
 #ifdef USART4_ENABLE
 void usart4_send_char(char c) {
+	while(rbuffer_full(&rb_tx4));
 	rbuffer_insert(c, &rb_tx4);
-	USART4.CTRLA |= USART_DREIE_bm;
+	USART4.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart4_print_char(char c, FILE *stream) { 
@@ -380,8 +385,9 @@ void usart4_close(void) {
 // USART5 FUNCTIONS
 #ifdef USART5_ENABLE
 void usart5_send_char(char c) {
+	while(rbuffer_full(&rb_tx5));
 	rbuffer_insert(c, &rb_tx5);
-	USART5.CTRLA |= USART_DREIE_bm;
+	USART5.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart5_print_char(char c, FILE *stream) { 
